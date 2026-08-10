@@ -24,14 +24,14 @@ export default function Contact() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16">
             <a
-              href="mailto:mayur.pote@email.com"
+              href="mailto:potemayur2826@email.com"
               className="w-full sm:w-auto px-8 py-4 bg-primary hover:bg-primary-dark text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-3 shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-1"
             >
               <Mail size={20} />
               Say Hello
             </a>
             <a
-              href="https://linkedin.com/in/mayurpote"
+              href="https://www.linkedin.com/in/mayur-pote-a4a420257"
               target="_blank"
               rel="noreferrer"
               className="w-full sm:w-auto px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-3 hover:-translate-y-1"
