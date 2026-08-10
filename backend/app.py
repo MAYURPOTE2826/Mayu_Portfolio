@@ -1,9 +1,18 @@
-from flask import Flask, jsonify
-from flask_cors import CORS
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+import os
 
-app = Flask(__name__)
-# Enable CORS for all routes so our Next.js frontend can fetch data without issues
-CORS(app)
+app = FastAPI()
+
+# Enable CORS for all routes (useful for local development)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # --- DATA STORE (In a real app, this would come from a database) ---
 
@@ -118,34 +127,29 @@ projects_data = {
 
 # --- API ROUTES ---
 
-@app.route('/api/skills', methods=['GET'])
+@app.get('/api/skills')
 def get_skills():
-    return jsonify(skills_data)
+    return skills_data
 
-@app.route('/api/experience', methods=['GET'])
+@app.get('/api/experience')
 def get_experience():
-    return jsonify(experience_data)
+    return experience_data
 
-@app.route('/api/projects', methods=['GET'])
+@app.get('/api/projects')
 def get_projects():
-    return jsonify(projects_data)
+    return projects_data
 
-@app.route('/', methods=['GET'])
-def index():
-    return jsonify({
-        "message": "Welcome to the Mayur Portfolio API!",
-        "endpoints": [
-            "/api/skills",
-            "/api/experience",
-            "/api/projects",
-            "/api/health"
-        ]
-    })
-
-@app.route('/api/health', methods=['GET'])
+@app.get('/api/health')
 def health_check():
-    return jsonify({"status": "ok", "message": "Flask API is running"})
+    return {"status": "ok", "message": "FastAPI is running"}
+
+# --- STATIC FILES ---
+# Mount the exported Next.js UI from the 'out' directory
+out_dir = os.path.join(os.path.dirname(__file__), "..", "out")
+if os.path.exists(out_dir):
+    app.mount("/", StaticFiles(directory=out_dir, html=True), name="static")
 
 if __name__ == '__main__':
-    # Run the Flask app on port 5000
-    app.run(debug=True, port=5000)
+    import uvicorn
+    # Run the FastAPI app on port 8000
+    uvicorn.run("app:app", host="127.0.0.1", port=8000, reload=True)

@@ -17,7 +17,7 @@ export default function Experience() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/api/experience")
+    fetch("/api/experience")
       .then((res) => res.json())
       .then((data) => {
         setExperiences(data);
