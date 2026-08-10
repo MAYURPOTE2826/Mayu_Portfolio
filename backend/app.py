@@ -75,7 +75,7 @@ projects_data = {
             "problem": "Traditional monitoring lacks intelligence for automated recovery, causing delayed downtime.",
             "solution": "Developed an ML-based system using Isolation & Random Forests to detect anomalies and trigger recovery, monitored via Prometheus & Grafana.",
             "tech": ["Python", "Scikit-learn", "Prometheus", "Grafana", "Flask", "Docker", "ML"],
-            "github": "#",
+            "github": "https://github.com/MAYURPOTE2826/",
             "demo": "#",
         },
         {
@@ -93,7 +93,7 @@ projects_data = {
             "problem": "Extracting specific context across multiple large PDF documents is highly inefficient.",
             "solution": "Implemented a robust RAG pipeline with LangChain and FAISS vector DB for semantic search and context-aware Q&A.",
             "tech": ["LangChain", "FAISS", "Streamlit", "Python", "RAG", "LLM"],
-            "github": "#",
+            "github": "https://github.com/MAYURPOTE2826/",
             "demo": "#",
         },
     ],
@@ -102,25 +102,25 @@ projects_data = {
             "title": "CGPA Prediction System",
             "description": "Random Forest model on historical data to predict student academic performance with a Flask UI.",
             "tech": ["Python", "Scikit-learn", "Random Forest", "Flask", "Pandas"],
-            "github": "#",
+            "github": "https://github.com/MAYURPOTE2826/",
         },
         {
             "title": "Health Advisor System",
             "description": "NLP-based symptom analysis using TF-IDF and classification for intelligent health recommendations.",
             "tech": ["Python", "NLP", "TF-IDF", "Scikit-learn", "Flask"],
-            "github": "#",
+            "github": "https://github.com/MAYURPOTE2826/",
         },
         {
             "title": "Web Series Recommendation",
             "description": "Content-based recommendation system using TF-IDF, Cosine Similarity, and TMDB API.",
             "tech": ["Python", "NLP", "Cosine Similarity", "TMDB API"],
-            "github": "#",
+            "github": "https://github.com/MAYURPOTE2826/",
         },
         {
             "title": "AI Outfit Color Recommender",
             "description": "Intelligent recommendation logic for outfit color combinations using OpenCV.",
             "tech": ["Python", "OpenCV", "Flask", "Computer Vision"],
-            "github": "#",
+            "github": "https://github.com/MAYURPOTE2826/",
         },
     ]
 }
