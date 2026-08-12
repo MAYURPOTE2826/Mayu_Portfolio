@@ -76,7 +76,7 @@ projects_data = {
             "solution": "Developed an ML-based system using Isolation & Random Forests to detect anomalies and trigger recovery, monitored via Prometheus & Grafana.",
             "tech": ["Python", "Scikit-learn", "Prometheus", "Grafana", "Flask", "Docker", "ML"],
             "github": "https://github.com/MAYURPOTE2826/",
-            "demo": "#",
+            "demo": "https://resilient-architecture-of-self-healing-joa3.onrender.com",
         },
         {
             "title": "CodeInsight AI Code Reviewer",
@@ -85,7 +85,7 @@ projects_data = {
             "solution": "Built a FastAPI & React application integrating Gemini Pro for real-time AI code review and best practices.",
             "tech": ["FastAPI", "React", "Gemini Pro", "GitHub Actions", "Python", "Generative AI"],
             "github": "https://github.com/MAYURPOTE2826/",
-            "demo": "#",
+            "demo": "https://codeinsight-ai-9xvb.onrender.com",
         },
         {
             "title": "Multi-PDF RAG Chatbot",
@@ -94,7 +94,7 @@ projects_data = {
             "solution": "Implemented a robust RAG pipeline with LangChain and FAISS vector DB for semantic search and context-aware Q&A.",
             "tech": ["LangChain", "FAISS", "Streamlit", "Python", "RAG", "LLM"],
             "github": "https://github.com/MAYURPOTE2826/",
-            "demo": "#",
+            "demo": "https://rag-streamlit-chatbot.onrender.com",
         },
     ],
     "other": [
