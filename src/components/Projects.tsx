@@ -11,6 +11,7 @@ type Project = {
   problem?: string;
   solution?: string;
   tech: string[];
+  image?: string;
   github: string;
   demo?: string;
 };
@@ -25,16 +26,26 @@ export default function Projects() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/projects")
-      .then((res) => res.json())
-      .then((data) => {
+    const fetchProjects = async () => {
+      setLoading(true);
+      try {
+        // Try fetching from the same origin first (works when Next.js serves the API)
+        let res = await fetch('/api/projects');
+        // If the same-origin API is not available (dev setup where backend runs on a different port),
+        // fall back to the backend FastAPI server.
+        if (!res.ok) {
+          res = await fetch('http://127.0.0.1:8000/api/projects');
+        }
+        const data = await res.json();
         setProjectsData(data);
+      } catch (err) {
+        console.error('Error fetching projects:', err);
+      } finally {
         setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching projects:", err);
-        setLoading(false);
-      });
+      }
+    };
+
+    fetchProjects();
   }, []);
 
   if (loading || !projectsData) {
@@ -103,8 +114,22 @@ export default function Projects() {
                   
                   <div className="lg:col-span-2 order-1 lg:order-2">
                     <div className="aspect-video w-full bg-gradient-to-br from-bg-darker to-bg-dark rounded-xl border border-white/10 overflow-hidden relative group-hover:border-primary/30 transition-colors flex items-center justify-center">
-                       {/* Placeholder for project image */}
-                       <span className="text-text-muted/50 font-heading text-lg">Project Visual</span>
+                       {project.image ? (
+                         (() => {
+                           const src = /^https?:\/\//.test(project.image)
+                             ? project.image
+                             : (typeof window !== 'undefined' ? window.location.origin + project.image : project.image);
+                           return (
+                             <img
+                               src={src}
+                               alt={project.title}
+                               className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                             />
+                           );
+                         })()
+                       ) : (
+                         <span className="text-text-muted/50 font-heading text-lg">Project Visual</span>
+                       )}
                     </div>
                   </div>
                 </div>
@@ -130,6 +155,16 @@ export default function Projects() {
                 transition={{ duration: 0.4, delay: idx * 0.1 }}
                 className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/[0.08] transition-colors flex flex-col h-full"
               >
+                {project.image && (
+                  <div className="w-full h-40 overflow-hidden rounded-md mb-4">
+                    {(() => {
+                      const thumbSrc = /^https?:\/\//.test(project.image)
+                        ? project.image
+                        : (typeof window !== 'undefined' ? window.location.origin + project.image : project.image);
+                      return <img src={thumbSrc} alt={project.title} className="w-full h-full object-cover" />;
+                    })()}
+                  </div>
+                )}
                 <div className="flex justify-between items-start mb-4">
                   <h4 className="text-xl font-bold text-white leading-tight">
                     {project.title}
