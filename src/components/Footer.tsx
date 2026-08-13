@@ -8,7 +8,7 @@ export default function Footer() {
     <footer className="bg-bg-darker border-t border-white/5 py-12">
       <div className="container mx-auto px-6 md:px-12 flex flex-col items-center">
         <a href="#" className="text-2xl font-heading font-bold text-white tracking-tighter mb-6">
-          Mayur<span className="text-primary">.</span>
+          Mayur Pote<span className="text-primary">.</span>
         </a>
         
         <div className="flex items-center gap-6 mb-8">
@@ -16,11 +16,11 @@ export default function Footer() {
             <FaGithub size={20} />
             <span className="sr-only">GitHub</span>
           </a>
-          <a href="https://linkedin.com/in/mayurpote" target="_blank" rel="noreferrer" className="text-text-muted hover:text-white transition-colors">
+          <a href="https://www.linkedin.com/in/mayur-pote-a4a420257/" target="_blank" rel="noreferrer" className="text-text-muted hover:text-white transition-colors">
             <FaLinkedin size={20} />
             <span className="sr-only">LinkedIn</span>
           </a>
-          <a href="mailto:mayur.pote@email.com" className="text-text-muted hover:text-white transition-colors">
+          <a href="mailto:potemayur2826@email.com" className="text-text-muted hover:text-white transition-colors">
             <Mail size={20} />
             <span className="sr-only">Email</span>
           </a>

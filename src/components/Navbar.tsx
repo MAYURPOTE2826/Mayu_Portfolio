@@ -35,7 +35,7 @@ export default function Navbar() {
     >
       <div className="container mx-auto px-6 md:px-12 flex justify-between items-center">
         <a href="#" className="text-2xl font-heading font-bold text-white tracking-tighter">
-          Mayur<span className="text-primary">.</span>
+          Mayur Pote<span className="text-primary">.</span>
         </a>
 
         {/* Desktop Nav */}

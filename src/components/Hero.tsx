@@ -72,7 +72,7 @@ export default function Hero() {
               <FaLinkedin size={22} />
               <span className="sr-only">LinkedIn</span>
             </a>
-            <a href="mailto:mayur.pote@email.com" className="text-text-muted hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full">
+            <a href="mailto:potemayur2826@email.com" className="text-text-muted hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full">
               <Mail size={22} />
               <span className="sr-only">Email</span>
             </a>

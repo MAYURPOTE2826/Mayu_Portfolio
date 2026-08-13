@@ -1,7 +1,12 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
 import os
+import smtplib
+import ssl
+from email.message import EmailMessage
+from typing import Optional
 
 app = FastAPI()
 
@@ -149,6 +154,59 @@ def get_projects():
 @app.get('/api/health')
 def health_check():
     return {"status": "ok", "message": "FastAPI is running"}
+
+# --- CONTACT FORM ENDPOINT ---
+class ContactRequest(BaseModel):
+    name: Optional[str] = None
+    email: Optional[str] = None
+    message: str
+
+@app.post('/api/contact')
+def send_contact(contact: ContactRequest):
+    # Basic validation
+    if not contact.message or (not contact.email and not contact.name):
+        raise HTTPException(status_code=400, detail="Missing required fields")
+
+    # Read SMTP configuration from environment variables
+    SMTP_HOST = os.environ.get("EMAIL_HOST")
+    SMTP_PORT = int(os.environ.get("EMAIL_PORT", "587"))
+    SMTP_USER = os.environ.get("EMAIL_HOST_USER")
+    SMTP_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+    USE_SSL = os.environ.get("EMAIL_USE_SSL", "false").lower() in ("1", "true", "yes")
+    USE_TLS = os.environ.get("EMAIL_USE_TLS", "true").lower() in ("1", "true", "yes")
+    TO_EMAIL = os.environ.get("EMAIL_TO", SMTP_USER or "potemayur2826@email.com")
+    FROM_EMAIL = os.environ.get("EMAIL_FROM", SMTP_USER or "no-reply@example.com")
+
+    if not SMTP_HOST or not SMTP_USER or not SMTP_PASSWORD:
+        raise HTTPException(status_code=500, detail="Email server not configured")
+
+    subject = f"Portfolio contact from {contact.name or contact.email}"
+    body = f"{contact.message}\n\nFrom: {contact.name}\nReply: {contact.email}"
+
+    msg = EmailMessage()
+    msg["Subject"] = subject
+    msg["From"] = FROM_EMAIL
+    msg["To"] = TO_EMAIL
+    if contact.email:
+        msg["Reply-To"] = contact.email
+    msg.set_content(body)
+
+    try:
+        if USE_SSL:
+            context = ssl.create_default_context()
+            with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, context=context) as server:
+                server.login(SMTP_USER, SMTP_PASSWORD)
+                server.send_message(msg)
+        else:
+            with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+                if USE_TLS:
+                    server.starttls(context=ssl.create_default_context())
+                server.login(SMTP_USER, SMTP_PASSWORD)
+                server.send_message(msg)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to send email: {str(e)}")
+
+    return {"status": "ok", "message": "Email sent"}
 
 # --- STATIC FILES ---
 # Mount the exported Next.js UI from the 'out' directory

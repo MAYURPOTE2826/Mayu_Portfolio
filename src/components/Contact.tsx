@@ -1,10 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Send } from "lucide-react";
 import { FaLinkedin } from "react-icons/fa";
 
 export default function Contact() {
+  const [loading, setLoading] = useState(false);
   return (
     <section id="contact" className="py-24 relative bg-bg-dark border-t border-white/5">
       <div className="container mx-auto px-6 md:px-12">
@@ -43,24 +45,67 @@ export default function Contact() {
 
           {/* Simple Contact Form Demo */}
           <div className="max-w-2xl mx-auto text-left bg-white/5 border border-white/10 rounded-3xl p-8 md:p-10">
-            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+            <form
+              className="space-y-6"
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const form = e.currentTarget as HTMLFormElement;
+                const formData = new FormData(form);
+                const name = (formData.get('name') as string || '').trim();
+                const email = (formData.get('email') as string || '').trim();
+                const message = (formData.get('message') as string || '').trim();
+
+                if (!message) {
+                  alert('Please enter a message.');
+                  return;
+                }
+                if (!email && !name) {
+                  alert('Please provide your name or email so I can reply.');
+                  return;
+                }
+
+                try {
+                  (document.activeElement as HTMLElement)?.blur();
+                  // show simple loading state
+                  setLoading(true);
+
+                  const res = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, message }),
+                  });
+
+                  if (!res.ok) {
+                    const text = await res.text();
+                    throw new Error(text || 'Server error');
+                  }
+
+                  alert('Message sent — thank you!');
+                  form.reset();
+                } catch (err: any) {
+                  alert('Failed to send message: ' + (err?.message || err));
+                } finally {
+                  setLoading(false);
+                }
+              }}
+            >
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label htmlFor="name" className="text-sm font-medium text-text-muted">Your Name</label>
-                  <input type="text" id="name" className="w-full bg-bg-darker border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors" placeholder="John Doe" />
+                  <input name="name" type="text" id="name" className="w-full bg-bg-darker border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors" placeholder="John Doe" />
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="email" className="text-sm font-medium text-text-muted">Your Email</label>
-                  <input type="email" id="email" className="w-full bg-bg-darker border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors" placeholder="john@example.com" />
+                  <input name="email" type="email" id="email" className="w-full bg-bg-darker border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors" placeholder="john@example.com" />
                 </div>
               </div>
               <div className="space-y-2">
                 <label htmlFor="message" className="text-sm font-medium text-text-muted">Message</label>
-                <textarea id="message" rows={4} className="w-full bg-bg-darker border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors resize-none" placeholder="How can I help you?"></textarea>
+                <textarea name="message" id="message" rows={4} className="w-full bg-bg-darker border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors resize-none" placeholder="How can I help you?"></textarea>
               </div>
-              <button className="w-full py-4 bg-white text-bg-darker font-bold rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2">
+              <button type="submit" disabled={loading} className={`w-full py-4 bg-white text-bg-darker font-bold rounded-lg transition-colors flex items-center justify-center gap-2 ${loading ? 'opacity-60 cursor-not-allowed' : 'hover:bg-gray-200'}`}>
                 <Send size={18} />
-                Send Message
+                {loading ? 'Sending...' : 'Send Message'}
               </button>
             </form>
           </div>
